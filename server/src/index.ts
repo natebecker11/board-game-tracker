@@ -1,20 +1,41 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
-import {User} from "./entity/User";
+import {createConnection, ConnectionOptions, ConnectionOptionsReader} from "typeorm";
+import {Player} from "./entity/Player";
+import {DevConnectOptions} from "./devConnectOptions";
 
-createConnection().then(async connection => {
+const ConnectionBase: any = {
+    entities: [
+        Player
+    ],
+    synchronize: true,
+    logging: false
+}; 
+
+const Environment = "dev";
+
+const BuildConnection = (environment: string): ConnectionOptions => {
+    switch (environment) {
+        case "dev":
+            return <ConnectionOptions> {
+                ...ConnectionBase,
+                ...DevConnectOptions
+            }
+    }
+}
+
+
+createConnection(BuildConnection(Environment)).then(async connection => {
 
     console.log("Inserting a new user into the database...");
-    const user = new User();
-    user.firstName = "Timber";
-    user.lastName = "Saw";
-    user.age = 25;
-    await connection.manager.save(user);
-    console.log("Saved a new user with id: " + user.id);
+    const player = new Player();
+    player.FirstName = "Timber";
+    player.LastName = "Saw";
+    await connection.manager.save(player);
+    console.log("Saved a new player with id: " + player.Id);
 
-    console.log("Loading users from the database...");
-    const users = await connection.manager.find(User);
-    console.log("Loaded users: ", users);
+    console.log("Loading players from the database...");
+    const players = await connection.manager.find(Player);
+    console.log("Loaded players: ", players);
 
     console.log("Here you can setup and run express/koa/any other framework.");
 
