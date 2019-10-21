@@ -2,13 +2,22 @@ import "reflect-metadata";
 import {createConnection, ConnectionOptions, ConnectionOptionsReader} from "typeorm";
 import {Player} from "./entity/Player";
 import {DevConnectOptions} from "./devConnectOptions";
+import { Play } from "./entity/Play";
+import { Game } from "./entity/Game";
+import { Author } from "./entity/Author";
+import express = require("express");
+import bodyParser = require("body-parser");
 
 const ConnectionBase: any = {
     entities: [
-        Player
+        Player,
+        Play,
+        Game,
+        Author
     ],
     synchronize: true,
-    logging: false
+    logging: false,
+    name: "test1"
 }; 
 
 const Environment = "dev";
@@ -26,17 +35,24 @@ const BuildConnection = (environment: string): ConnectionOptions => {
 
 createConnection(BuildConnection(Environment)).then(async connection => {
 
-    console.log("Inserting a new user into the database...");
-    const player = new Player();
-    player.FirstName = "Timber";
-    player.LastName = "Saw";
-    await connection.manager.save(player);
-    console.log("Saved a new player with id: " + player.Id);
+    const PlayerController = require('./controller/PlayerController');
 
-    console.log("Loading players from the database...");
-    const players = await connection.manager.find(Player);
-    console.log("Loaded players: ", players);
+    const app = express();
+    app.use(bodyParser.json());
+    console.log("cn", connection.name)
+    app.use("/Player", PlayerController);
+    app.listen(3000);
 
-    console.log("Here you can setup and run express/koa/any other framework.");
+    // console.log("Inserting a new user into the database...");
+    // const player = new Player();
+    // player.FirstName = "Timber";
+    // player.LastName = "Saw";
+    // await connection.manager.save(player);
+    // console.log("Saved a new player with id: " + player.Id);
+
+    // console.log("Loading players from the database...");
+    // const players = await connection.manager.find(Player);
+    // console.log("Loaded players: ", players);
+
 
 }).catch(error => console.log(error));
