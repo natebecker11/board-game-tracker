@@ -1,5 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany} from "typeorm";
 import { Play } from "./Play";
+import { Score } from "./Score";
 
 @Entity()
 export class Player {
@@ -21,5 +22,8 @@ export class Player {
 
     @ManyToMany(type => Play, play => play.Players)
     @JoinTable()
-    Plays: Play[]
+    Plays: Play[];
+
+    @OneToMany(type => Score, score => score.Player)
+    Scores: Score[];
 }
