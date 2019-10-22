@@ -9,7 +9,7 @@ const router = express.Router();
 
 // route prefix: /Player
 
-const playerRepo = getConnection("test1").getRepository("Player");
+const playerRepo = getConnection().getRepository("Player");
 
 //get all players
 router.get("/", (req, res) => {
@@ -79,6 +79,11 @@ router.post("/", async (req: Request, res: Response) => {
                 })
             }
         }
+    }
+    else {
+        res.send(<ExceptionResponse> {
+            Exception: "Invalid request body."
+        })
     }
 })
 

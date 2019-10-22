@@ -7,17 +7,18 @@ import { Game } from "./entity/Game";
 import { Author } from "./entity/Author";
 import express = require("express");
 import bodyParser = require("body-parser");
+import { Score } from "./entity/Score";
 
 const ConnectionBase: any = {
     entities: [
         Player,
         Play,
         Game,
-        Author
+        Author,
+        Score
     ],
     synchronize: true,
-    logging: false,
-    name: "test1"
+    logging: false
 }; 
 
 const Environment = "dev";
@@ -36,12 +37,15 @@ const BuildConnection = (environment: string): ConnectionOptions => {
 createConnection(BuildConnection(Environment)).then(async connection => {
 
     const PlayerController = require('./controller/PlayerController');
+    const GameController = require('./controller/GameController');
+
 
     const app = express();
     app.use(bodyParser.json());
-    console.log("cn", connection.name)
     app.use("/Player", PlayerController);
+    app.use("/Game", GameController);
     app.listen(3000);
+    console.log("Listening on :3000")
 
     // console.log("Inserting a new user into the database...");
     // const player = new Player();

@@ -16,7 +16,8 @@ export class Game {
 
     @Column({
         type: "nvarchar",
-        length: 50
+        length: 50,
+        nullable: true
     })
     ShortName: string;
 
