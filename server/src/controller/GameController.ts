@@ -73,7 +73,7 @@ router.post("/", async (req: Request, res: Response) => {
             try {
                 const newGame = await gameRepo.create(game);
                 const results = await gameRepo.save(newGame);
-                res.send(results);
+                res.send(new GenericResponse(results));
             }
             catch (err) {
                 res.send(<ExceptionResponse> {
@@ -91,11 +91,19 @@ router.post("/", async (req: Request, res: Response) => {
 
 //typeahead
 router.get("/listByName/:nameString", async (req: Request, res: Response) => {
-    const nameString = req.params["nameString"];
-    const gameList = await gameRepo.createQueryBuilder("game")
-        .where(":fullName like :nameString", {
-            fullName: "%" +
+    const nameString = `%${req.params["nameString"]}%`;
+    try {
+        const gameList = await gameRepo.createQueryBuilder("game")
+            .where("game.Name LIKE :nameString", {nameString})
+            .getMany();
+    
+        res.send(new GenericResponse(gameList));
+    }
+    catch (err) {
+        res.send(<ExceptionResponse> {
+            Exception: err.message
         })
+    }
 
 })
 

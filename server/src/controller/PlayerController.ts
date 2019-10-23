@@ -71,7 +71,7 @@ router.post("/", async (req: Request, res: Response) => {
             try {
                 const newPlayer = await playerRepo.create(req.body);
                 const results = await playerRepo.save(newPlayer);
-                res.send(results);
+                res.send(new GenericResponse(results));
             }
             catch (err) {
                 res.send(<ExceptionResponse> {
@@ -83,6 +83,23 @@ router.post("/", async (req: Request, res: Response) => {
     else {
         res.send(<ExceptionResponse> {
             Exception: "Invalid request body."
+        })
+    }
+})
+
+//typeahead
+router.get("/listByName/:nameString", async (req: Request, res: Response) => {
+    const nameString = `%${req.params["nameString"]}%`;
+    try {
+        const playerList = await playerRepo.createQueryBuilder("player")
+            .where("player.FullName LIKE :nameString", {nameString})
+            .getMany();
+        
+        res.send(new GenericResponse(playerList))
+    }
+    catch (err) {
+        res.send(<ExceptionResponse> {
+            Exception: err.message
         })
     }
 })

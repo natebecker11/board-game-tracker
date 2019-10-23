@@ -20,6 +20,11 @@ export class Player {
     })
     LastName: string;
 
+    @Column({
+        asExpression: "concat(`FirstName`,' ',`LastName`)"
+    })
+    FullName: string;
+
     @ManyToMany(type => Play, play => play.Players)
     @JoinTable()
     Plays: Play[];
