@@ -12,9 +12,20 @@ export class Play {
     })
     DatePlayed: string;
 
+    @ManyToOne(type => Player, {
+        nullable: true
+    })
+    Winner: Player;
+
+    @ManyToOne(type => Player, {
+        nullable: true
+    })
+    Loser: Player;
+
     @ManyToOne(type => Game, game => game.Plays)
     Game: Game;
 
     @ManyToMany(type => Player, player => player.Plays)
     Players: Player[]
+
 }
