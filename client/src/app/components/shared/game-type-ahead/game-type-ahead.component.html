@@ -1,0 +1,8 @@
+<mat-form-field class="w100">
+    <input matInput [placeholder]="''" [formControl]="SearchControl" [matAutocomplete]="searchControl">
+</mat-form-field>
+<mat-autocomplete #searchControl="matAutocomplete" [displayWith]="DisplayGame">
+    <mat-option *ngFor="let game of GameList" [title]="DisplayGame(game)" [value]="game" (onSelectionChange)="OnGameChange(game)">
+        <span>{{DisplayGame(game)}}</span>
+    </mat-option>
+</mat-autocomplete>

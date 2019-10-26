@@ -27,6 +27,13 @@ export class Game {
     @Column("int")
     PlayerMax: number;
 
+    @Column({
+        type: "nvarchar",
+        length: 50,
+        nullable: true
+    })
+    BoardGameGeekId: string;
+
     @OneToMany(type => Play, play => play.Game)
     Plays: Play[];
 

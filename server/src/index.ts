@@ -8,6 +8,7 @@ import { Author } from "./entity/Author";
 import express = require("express");
 import bodyParser = require("body-parser");
 import { Score } from "./entity/Score";
+import { BggClient } from "./integration/BggClient";
 
 const ConnectionBase: any = {
     entities: [
@@ -46,6 +47,9 @@ createConnection(BuildConnection(Environment)).then(async connection => {
     app.use("/Game", GameController);
     app.listen(3000);
     console.log("Listening on :3000")
+
+    const bggClient = new BggClient();
+    bggClient.GetGameInfo("wingspan");
 
     // console.log("Inserting a new user into the database...");
     // const player = new Player();
