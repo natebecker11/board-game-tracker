@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { GameServiceService } from 'src/app/api/game-service.service';
 
 @Component({
   selector: 'app-game-type-ahead',
@@ -9,21 +10,33 @@ import { Observable } from 'rxjs';
 })
 export class GameTypeAheadComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private _gameApi: GameServiceService
+  ) { }
 
   ngOnInit() {
-    if (this.OnGameChange = null) {
-      this.OnGameChange = (game: any) => {
-        // parse that
-      }
-    }
+    this.OnGameChange = new EventEmitter<any>();
   }
 
   public SearchControl: FormControl = new FormControl();
-  public GameSearchFunction: (searchText: string) => Observable<any>;
+  // public GameSearchFunction: (searchText: string) => Observable<any>;
   public SearchText: string;
 
-  @Input() OnGameChange: (game: any) => void = null;
+  @Output() public OnGameChange: EventEmitter<any>;
+
+  public OnClickGameChange(game: any): void {
+    this.OnGameChange.emit({
+      Data: game
+    })
+  };
+
+  public GameSearchFunction(searchText: string): void {
+    //todo: build this, configure httpclient
+    console.log("sending")
+    this._gameApi.ListByName(searchText).subscribe(response => {
+      console.log("resp", response)
+    })
+  }
 
   public DisplayGame(game: any): string {
     let displayVal = "";

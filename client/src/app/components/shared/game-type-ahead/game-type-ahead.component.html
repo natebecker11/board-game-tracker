@@ -2,7 +2,10 @@
     <input matInput [placeholder]="''" [formControl]="SearchControl" [matAutocomplete]="searchControl">
 </mat-form-field>
 <mat-autocomplete #searchControl="matAutocomplete" [displayWith]="DisplayGame">
-    <mat-option *ngFor="let game of GameList" [title]="DisplayGame(game)" [value]="game" (onSelectionChange)="OnGameChange(game)">
+    <mat-option *ngFor="let game of GameList" [title]="DisplayGame(game)" [value]="game" (onSelectionChange)="OnClickGameChange(game)">
         <span>{{DisplayGame(game)}}</span>
     </mat-option>
 </mat-autocomplete>
+
+
+<button (click)="GameSearchFunction('scythe')">CLICKME</button>

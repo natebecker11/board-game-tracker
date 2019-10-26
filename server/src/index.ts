@@ -48,8 +48,8 @@ createConnection(BuildConnection(Environment)).then(async connection => {
     app.listen(3000);
     console.log("Listening on :3000")
 
-    const bggClient = new BggClient();
-    bggClient.GetGameInfo("wingspan");
+    // const bggClient = new BggClient();
+    // bggClient.GetGameInfo("wingspan");
 
     // console.log("Inserting a new user into the database...");
     // const player = new Player();
